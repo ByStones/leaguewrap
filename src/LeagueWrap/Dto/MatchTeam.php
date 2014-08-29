@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LeagueWrap\Dto;
 
 /**
@@ -8,21 +7,19 @@ namespace LeagueWrap\Dto;
  * @package LeagueWrap\Dto
  * Team of a match
  */
-class MatchTeam extends AbstractDto{
+class MatchTeam extends AbstractDto {
+
     /**
      * Set up the information about this team.
      *
      * @param array $info
      */
-    public function __construct(array $info)
-    {
+    public function __construct(array $info) {
         // set teams (match api)
-        if(isset($info['bans']))
-        {
+        if (isset($info['bans'])) {
             $raw_bans = $info['bans'];
             $bans = [];
-            foreach($raw_bans as $key => $raw_ban)
-            {
+            foreach ($raw_bans as $key => $raw_ban) {
                 $bans[$key] = new Ban($raw_ban);
             }
             $info['bans'] = $bans;
@@ -37,18 +34,16 @@ class MatchTeam extends AbstractDto{
      * @param int $id
      * @return Ban|null
      */
-    public function ban($id)
-    {
-        if ( ! isset($this->info['bans']))
-        {
+    public function ban($id) {
+        if (!isset($this->info['bans'])) {
             // no teams
             return null;
         }
         $bans = $this->info['bans'];
-        if (isset($bans[$id]))
-        {
+        if (isset($bans[$id])) {
             return $bans[$id];
         }
         return null;
     }
+
 }

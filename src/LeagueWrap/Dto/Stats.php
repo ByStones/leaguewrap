@@ -1,4 +1,7 @@
 <?php
+
 namespace LeagueWrap\Dto;
 
-class Stats extends AbstractDto {}
+class Stats extends AbstractDto {
+    
+}

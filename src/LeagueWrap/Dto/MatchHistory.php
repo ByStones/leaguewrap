@@ -11,13 +11,10 @@ class MatchHistory extends AbstractListDto {
 
     protected $listKey = 'matches';
 
-    public function __construct(array $info)
-    {
-        if (isset($info['matches']))
-        {
+    public function __construct(array $info) {
+        if (isset($info['matches'])) {
             $matches = [];
-            foreach ($info['matches'] as $key => $value)
-            {
+            foreach ($info['matches'] as $key => $value) {
                 $matches[$key] = new Match($value);
             }
             $info['matches'] = $matches;
@@ -32,13 +29,12 @@ class MatchHistory extends AbstractListDto {
      * @param int $id
      * @return Match|null
      */
-    public function match($id)
-    {
-        if ( ! isset($this->info['matches'][$id]))
-        {
+    public function match($id) {
+        if (!isset($this->info['matches'][$id])) {
             return null;
         }
 
         return $this->info['matches'][$id];
     }
-} 
+
+}

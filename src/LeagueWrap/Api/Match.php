@@ -2,8 +2,8 @@
 
 namespace LeagueWrap\Api;
 
-class Match extends AbstractApi
-{
+class Match extends AbstractApi {
+
     /**
      * Valid version for this api call.
      *
@@ -45,12 +45,12 @@ class Match extends AbstractApi
      * @param bool $includeTimeline
      * @return Match
      */
-    public function match($id, $includeTimeline = false)
-    {
-        if($includeTimeline)
-            $response = $this->request('match/'.$id, array('includeTimeline' => $includeTimeline));
+    public function match($id, $includeTimeline = false) {
+        if ($includeTimeline)
+            $response = $this->request('match/' . $id, array('includeTimeline' => $includeTimeline));
         else
-            $response = $this->request('match/'.$id);
+            $response = $this->request('match/' . $id);
         return new \LeagueWrap\Dto\Match($response);
     }
-} 
+
+}

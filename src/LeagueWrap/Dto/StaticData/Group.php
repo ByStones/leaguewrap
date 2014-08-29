@@ -1,6 +1,9 @@
 <?php
+
 namespace LeagueWrap\Dto\StaticData;
 
 use LeagueWrap\Dto\AbstractDto;
 
-class Group extends AbstractDto {}
+class Group extends AbstractDto {
+    
+}

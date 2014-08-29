@@ -2,7 +2,6 @@
 
 namespace LeagueWrap\Api;
 
-
 class Matchhistory extends AbstractApi {
 
     /**
@@ -45,11 +44,10 @@ class Matchhistory extends AbstractApi {
      * @param mixed $id
      * @return array
      */
-    public function history($identity)
-    {
+    public function history($identity) {
         $id = $this->extractId($identity);
 
-        $array = $this->request('matchhistory/'.$id);
+        $array = $this->request('matchhistory/' . $id);
         $matchhistory = new \LeagueWrap\Dto\MatchHistory($array);
 
         $this->attachResponse($identity, $matchhistory, 'matchhistory');
@@ -57,4 +55,4 @@ class Matchhistory extends AbstractApi {
         return $matchhistory;
     }
 
-} 
+}

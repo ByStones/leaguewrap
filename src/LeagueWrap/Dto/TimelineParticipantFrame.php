@@ -1,7 +1,7 @@
 <?php
 
-
 namespace LeagueWrap\Dto;
 
-
-class TimelineParticipantFrame extends AbstractDto {}
+class TimelineParticipantFrame extends AbstractDto {
+    
+}

@@ -1,4 +1,5 @@
 <?php
+
 namespace LeagueWrap\Limit;
 
 use Memcached;
@@ -6,61 +7,51 @@ use LeagueWrap\LimitInterface;
 
 class Limit implements LimitInterface {
 
-	protected $key;
+    protected $key;
+    protected $hits;
+    protected $seconds;
+    protected $memcached;
 
-	protected $hits;
+    public function __construct() {
+        $this->memcached = new Memcached;
+        $this->memcached->addServer('localhost', 11211, 100);
+    }
 
-	protected $seconds;
+    public function setRate($hits, $seconds) {
+        $this->key = 'leagueWrap.hits.' . $hits . 'x' . $seconds;
+        $this->hits = (int) $hits;
+        $this->seconds = (int) $seconds;
+        return true;
+    }
 
-	protected $memcached;
+    public function hit($count = 1) {
+        $hitsLeft = $this->memcached->get($this->key);
+        if ($this->memcached->getResultCode() == Memcached::RES_NOTFOUND) {
+            // this is the first hit
+            $hitsLeft = $this->hits;
+            $this->memcached->set($this->key, $this->hits, time() + $this->seconds);
+        }
 
-	public function __construct()
-	{
-		$this->memcached = new Memcached;
-		$this->memcached->addServer('localhost', 11211, 100);
-	}
+        if ($hitsLeft < $count) {
+            return false;
+        }
 
-	public function setRate($hits, $seconds)
-	{
-		$this->key     = 'leagueWrap.hits.'.$hits.'x'.$seconds;
-		$this->hits    = (int) $hits;
-		$this->seconds = (int) $seconds;
-		return true;
-	}
+        if ($this->memcached->decrement($this->key, $count) === FALSE) {
+            // it failed to decrement
+            return false;
+        }
 
-	public function hit($count = 1)
-	{
-		$hitsLeft = $this->memcached->get($this->key);
-		if ($this->memcached->getResultCode() == Memcached::RES_NOTFOUND)
-		{
-			// this is the first hit
-			$hitsLeft = $this->hits;
-			$this->memcached->set($this->key, $this->hits, time() + $this->seconds);
-		}
+        return true;
+    }
 
-		if ($hitsLeft < $count)
-		{
-			return false;
-		}
+    public function remaining() {
+        $hitsLeft = $this->memcached->get($this->key);
+        if ($this->memcached->getResultCode() == Memcached::RES_NOTFOUND) {
+            // this is the first hit
+            $hitsLeft = $this->hits;
+        }
 
-		if ($this->memcached->decrement($this->key, $count) === FALSE)
-		{
-			// it failed to decrement
-			return false;
-		}
+        return $hitsLeft;
+    }
 
-		return true;
-	}
-
-	public function remaining()
-	{
-		$hitsLeft = $this->memcached->get($this->key);
-		if ($this->memcached->getResultCode() == Memcached::RES_NOTFOUND)
-		{
-			// this is the first hit
-			$hitsLeft = $this->hits;
-		}
-
-		return $hitsLeft;
-	}
 }

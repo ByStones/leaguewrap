@@ -1,4 +1,5 @@
 <?php
+
 namespace LeagueWrap\Dto;
 
 use Countable;
@@ -9,64 +10,52 @@ use LeagueWrap\Exception\ListKeyNotSetException;
 
 Abstract class AbstractListDto extends AbstractDto implements ArrayAccess, IteratorAggregate, Countable {
 
-	protected $listKey = null;
+    protected $listKey = null;
 
-	public function offsetExists($offset)
-	{
-		$info = $this->getListByKey();
-		
-		return isset($info[$offset]);
-	}
+    public function offsetExists($offset) {
+        $info = $this->getListByKey();
 
-	public function offsetGet($offset)
-	{
-		$info = $this->getListByKey();
-		if ( ! isset($info[$offset]))
-		{
-			return null;
-		}
+        return isset($info[$offset]);
+    }
 
-		return $info[$offset];
-	}
+    public function offsetGet($offset) {
+        $info = $this->getListByKey();
+        if (!isset($info[$offset])) {
+            return null;
+        }
 
-	public function offsetSet($offset, $value)
-	{
-		// just to make sure the listKey exists
-		$this->getListByKey();
-		if (is_null($offset))
-		{
-			$this->info[$this->listKey][] = $value;
-		}
-		else
-		{
-			$this->info[$this->listKey][$offset] = $value;
-		}
-	}
+        return $info[$offset];
+    }
 
-	public function offsetUnset($offset)
-	{
-		$this->getListByKey();
-		unset($this->info[$this->listKey][$offset]);
-	}
+    public function offsetSet($offset, $value) {
+        // just to make sure the listKey exists
+        $this->getListByKey();
+        if (is_null($offset)) {
+            $this->info[$this->listKey][] = $value;
+        } else {
+            $this->info[$this->listKey][$offset] = $value;
+        }
+    }
 
-	public function getIterator()
-	{
-		return new ArrayIterator($this->getListByKey());
-	}
+    public function offsetUnset($offset) {
+        $this->getListByKey();
+        unset($this->info[$this->listKey][$offset]);
+    }
 
-	public function count($mode = COUNT_NORMAL)
-	{
-		return count($this->getListByKey());
-	}
+    public function getIterator() {
+        return new ArrayIterator($this->getListByKey());
+    }
 
-	protected function getListByKey()
-	{
-		if (is_null($this->listKey) or
-		     ! isset($this->info[$this->listKey]))
-		{
-			throw new ListKeyNotSetException('The listKey is not found in the abstract list DTO');
-		}
+    public function count($mode = COUNT_NORMAL) {
+        return count($this->getListByKey());
+    }
 
-		return $this->info[$this->listKey];
-	}
+    protected function getListByKey() {
+        if (is_null($this->listKey) or ! isset($this->info[$this->listKey])) {
+            throw new ListKeyNotSetException('The listKey is not found in the abstract list DTO');
+        }
+
+        return $this->info[$this->listKey];
+    }
+
 }

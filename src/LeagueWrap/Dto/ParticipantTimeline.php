@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LeagueWrap\Dto;
 
 /**
@@ -8,4 +7,6 @@ namespace LeagueWrap\Dto;
  * @package LeagueWrap\Dto
  * Timeline of one participant of a match
  */
-class ParticipantTimeline extends AbstractDto{}
+class ParticipantTimeline extends AbstractDto {
+    
+}
