@@ -16,24 +16,6 @@ class Game extends AbstractApi {
     ];
 
     /**
-     * A list of all permitted regions for the Champion api call.
-     *
-     * @param array
-     */
-    protected $permittedRegions = [
-        'br',
-        'eune',
-        'euw',
-        'lan',
-        'las',
-        'na',
-        'oce',
-        'kr',
-        'ru',
-        'tr',
-    ];
-
-    /**
      * Get the recent games by summoner id.
      *
      * @param mixed $id

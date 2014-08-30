@@ -28,24 +28,6 @@ class Summoner extends AbstractApi {
     ];
 
     /**
-     * A list of all permitted regions for the Champion api call.
-     *
-     * @param array
-     */
-    protected $permittedRegions = [
-        'br',
-        'eune',
-        'euw',
-        'lan',
-        'las',
-        'na',
-        'oce',
-        'ru',
-        'tr',
-        'kr',
-    ];
-
-    /**
      * Attempt to get a summoner by key.
      *
      * @param string $key

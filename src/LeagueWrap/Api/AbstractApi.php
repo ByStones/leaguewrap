@@ -32,7 +32,7 @@ abstract class AbstractApi {
     /**
      * The region to be used by the api.
      *
-     * @param string
+     * @param Region
      */
     protected $region;
 
@@ -48,7 +48,18 @@ abstract class AbstractApi {
      *
      * @param array
      */
-    protected $permittedRegions = [];
+    protected $permittedRegions = [
+        Region::BR,
+        Region::EUNE,
+        Region::EUW,
+        Region::LAN,
+        Region::LAS,
+        Region::NA,
+        Region::OCE,
+        Region::RU,
+        Region::TR,
+        Region::KR,
+    ];
 
     /**
      * The version we want to use. If null use the first
@@ -115,6 +126,7 @@ abstract class AbstractApi {
      */
     public function setRegion($region) {
         $this->region = new Region($region);
+
         return $this;
     }
 
@@ -162,7 +174,7 @@ abstract class AbstractApi {
         $version = $this->getVersion();
 
         // get and validate the region
-        if ($this->region->isLocked($this->permittedRegions)) {
+        if (!in_array($this->region->getRegion(), $this->permittedRegions)) {
             throw new RegionException('The region "' . $this->region->getRegion() . '" is not permited to query this API.');
         }
 

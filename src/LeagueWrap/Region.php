@@ -4,6 +4,18 @@ namespace LeagueWrap;
 
 class Region {
 
+    const BR = 'br';
+    const EUNE = 'eune';
+    const EUW = 'euw';
+    const KR = 'kr';
+    const LAN = 'lan';
+    const LAS = 'las';
+    const NA = 'na';
+    const OCE = 'oce';
+    const RU = 'ru';
+    const TR = 'tr';
+    const PBE = 'pbe';
+
     /**
      * The region that this object represents.
      *
@@ -41,7 +53,7 @@ class Region {
      * @return string
      */
     public function getDomain($static = false) {
-        if ($static) {
+        if ($static === true) {
             return $this->getStaticDataDomain();
         }
 
@@ -57,27 +69,8 @@ class Region {
         return $this->defaultStaticDomain;
     }
 
-    /**
-     * Determines wether the given region is locked out.
-     *
-     * @param array $region
-     * @return bool
-     */
-    public function isLocked(array $regions) {
-        if (count($regions) == 0) {
-            // no regions are locked from this call.
-            return true;
-        }
-
-        foreach ($regions as $region) {
-            if ($this->region == strtolower($region)) {
-                // the region is fine
-                return false;
-            }
-        }
-
-        // the region was not found
-        return true;
+    public function __toString() {
+        return (string) $this->region;
     }
 
 }

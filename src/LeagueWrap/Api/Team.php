@@ -24,24 +24,6 @@ class Team extends AbstractApi {
     ];
 
     /**
-     * A list of all permitted regions for the Champion api call.
-     *
-     * @param array
-     */
-    protected $permittedRegions = [
-        'br',
-        'eune',
-        'euw',
-        'lan',
-        'las',
-        'na',
-        'oce',
-        'ru',
-        'tr',
-        'kr',
-    ];
-
-    /**
      * Gets the team information by summoner id or list of summoner ids.
      *
      * @param mixed $identity

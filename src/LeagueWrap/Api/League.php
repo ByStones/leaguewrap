@@ -17,24 +17,6 @@ class League extends AbstractApi {
     ];
 
     /**
-     * A list of all permitted regions for the league api call.
-     *
-     * @param array
-     */
-    protected $permittedRegions = [
-        'br',
-        'eune',
-        'euw',
-        'lan',
-        'las',
-        'na',
-        'oce',
-        'ru',
-        'tr',
-        'kr',
-    ];
-
-    /**
      * Gets the league information by summoner id or list of summoner ids. To only
      * get the single entry information for the summoner(s) ensure that $entry
      * is set to true.

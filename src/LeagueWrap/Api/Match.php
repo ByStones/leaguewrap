@@ -2,6 +2,8 @@
 
 namespace LeagueWrap\Api;
 
+use LeagueWrap\Region;
+
 class Match extends AbstractApi {
 
     /**
@@ -19,16 +21,17 @@ class Match extends AbstractApi {
      * @param array
      */
     protected $permittedRegions = [
-        'br',
-        'eune',
-        'euw',
-        'lan',
-        'las',
-        'na',
-        'oce',
-        'kr',
-        'ru',
-        'tr',
+        Region::BR,
+        Region::EUNE,
+        Region::EUW,
+        Region::LAN,
+        Region::LAS,
+        Region::NA,
+        Region::OCE,
+        Region::RU,
+        Region::TR,
+        Region::KR,
+        Region::PBE,
     ];
 
     /**

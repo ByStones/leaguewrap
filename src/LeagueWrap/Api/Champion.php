@@ -17,24 +17,6 @@ class Champion extends AbstractApi {
     ];
 
     /**
-     * A list of all permitted regions for the Champion api call.
-     *
-     * @param array
-     */
-    protected $permittedRegions = [
-        'br',
-        'eune',
-        'euw',
-        'lan',
-        'las',
-        'na',
-        'oce',
-        'ru',
-        'tr',
-        'kr',
-    ];
-
-    /**
      * Gets all the champions in the given region.
      *
      * @return ChampionList

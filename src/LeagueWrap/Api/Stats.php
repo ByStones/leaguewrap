@@ -25,24 +25,6 @@ class Stats extends AbstractApi {
     protected $season = null;
 
     /**
-     * A list of all permitted regions for the Stats api call.
-     *
-     * @param array
-     */
-    protected $permittedRegions = [
-        'br',
-        'eune',
-        'euw',
-        'lan',
-        'las',
-        'na',
-        'oce',
-        'ru',
-        'tr',
-        'kr',
-    ];
-
-    /**
      * Sets the season param to the given input.
      *
      * @param string $season

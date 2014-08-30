@@ -42,24 +42,6 @@ class Staticdata extends AbstractApi {
     ];
 
     /**
-     * A list of all permitted regions for the Staticdata api call.
-     *
-     * @var array
-     */
-    protected $permittedRegions = [
-        'br',
-        'eune',
-        'euw',
-        'kr',
-        'lan',
-        'las',
-        'na',
-        'oce',
-        'ru',
-        'tr',
-    ];
-
-    /**
      * Sets the locale the data should be returned in. Null returns
      * the default local for that region.
      *

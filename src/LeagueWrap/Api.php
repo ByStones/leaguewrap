@@ -26,7 +26,7 @@ class Api {
      *
      * @var string
      */
-    protected $region = 'na';
+    protected $region = Region::NA;
 
     /**
      * The provider used to connect with the riot API.
