@@ -49,33 +49,6 @@ class LimitTest extends PHPUnit_Framework_TestCase {
     /**
      * @expectedException LeagueWrap\Exception\LimitReachedException
      */
-    public function testSingleLimitFacade() {
-        $this->limit1->shouldReceive('setRate')
-                ->once()
-                ->with(1, 10)
-                ->andReturn(true);
-        $this->limit1->shouldReceive('hit')
-                ->twice()
-                ->with(1)
-                ->andReturn(true, false);
-        $this->client->shouldReceive('baseUrl')
-                ->twice();
-        $this->client->shouldReceive('request')
-                ->with('na/v1.4/summoner/by-name/bakasan', [
-                    'api_key' => 'key',
-                ])->once()
-                ->andReturn(file_get_contents('tests/Json/summoner.bakasan.json'));
-
-        LeagueWrap\StaticApi::mount();
-        Api::setKey('key', $this->client);
-        Api::limit(1, 10, $this->limit1);
-        Summoner::info('bakasan');
-        Summoner::info('bakasan');
-    }
-
-    /**
-     * @expectedException LeagueWrap\Exception\LimitReachedException
-     */
     public function testDoubleLimit() {
         $this->limit1->shouldReceive('setRate')
                 ->once()

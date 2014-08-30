@@ -48,35 +48,4 @@ class CacheTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $champion->getRequestCount());
     }
 
-    public function testRememberSummonerFacade() {
-        $bakasan = file_get_contents('tests/Json/summoner.bakasan.json');
-        $this->cache->shouldReceive('set')
-                ->once()
-                ->with($bakasan, '9bd8e5b11e0ac9c0a52d5711c9057dd2', 10)
-                ->andReturn(true);
-        $this->cache->shouldReceive('has')
-                ->twice()
-                ->with('9bd8e5b11e0ac9c0a52d5711c9057dd2')
-                ->andReturn(false, true);
-        $this->cache->shouldReceive('get')
-                ->once()
-                ->with('9bd8e5b11e0ac9c0a52d5711c9057dd2')
-                ->andReturn($bakasan);
-
-        $this->client->shouldReceive('baseUrl')
-                ->twice();
-        $this->client->shouldReceive('request')
-                ->with('na/v1.4/summoner/by-name/bakasan', [
-                    'api_key' => 'key',
-                ])->once()
-                ->andReturn($bakasan);
-
-        LeagueWrap\StaticApi::mount();
-        Api::setKey('key', $this->client);
-        Api::remember(10, $this->cache);
-        Summoner::info('bakasan');
-        Summoner::info('bakasan');
-        $this->assertEquals(1, Summoner::getRequestCount());
-    }
-
 }
