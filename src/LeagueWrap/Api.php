@@ -2,8 +2,6 @@
 
 namespace LeagueWrap;
 
-use LeagueWrap\Cache;
-use LeagueWrap\CacheInterface;
 use LeagueWrap\Api\AbstractApi;
 use LeagueWrap\LimitInterface;
 use LeagueWrap\Limit\Limit;
@@ -35,13 +33,6 @@ class Api {
      * @var object
      */
     protected $client;
-
-    /**
-     * This contains the cache container that we intend to use.
-     *
-     * @var CacheInterface
-     */
-    protected $cache;
 
     /**
      * How long, in seconds, should we remember a query's response.
@@ -121,10 +112,6 @@ class Api {
                 ->setRegion($this->region)
                 ->attachStaticData($this->attachStaticData);
 
-        if ($this->cache instanceof CacheInterface) {
-            $api->remember($this->remember, $this->cache);
-        }
-
         return $api;
     }
 
@@ -136,25 +123,6 @@ class Api {
      */
     public function setRegion($region) {
         $this->region = $region;
-        return $this;
-    }
-
-    /**
-     * Sets the amount of seconds we should remember the response for.
-     * Leave it empty (or null) if you want to use the default set for 
-     * each api request.
-     *
-     * @param int $seconds
-     * @param CacheInterface $cache
-     * @chainable
-     */
-    public function remember($seconds = null, CacheInterface $cache = null) {
-        if (is_null($cache)) {
-            // use the built in cache interface
-            $cache = new Cache;
-        }
-        $this->cache = $cache;
-        $this->remember = $seconds;
         return $this;
     }
 

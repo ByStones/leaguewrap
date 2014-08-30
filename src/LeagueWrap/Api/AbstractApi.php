@@ -5,8 +5,6 @@ namespace LeagueWrap\Api;
 use LeagueWrap\Dto\Summoner;
 use LeagueWrap\Api;
 use LeagueWrap\Region;
-use LeagueWrap\Cache;
-use LeagueWrap\CacheInterface;
 use LeagueWrap\ClientInterface;
 use LeagueWrap\Limit\Collection;
 use LeagueWrap\Exception\RegionException;
@@ -72,27 +70,6 @@ abstract class AbstractApi {
      * @param int
      */
     protected $requests = 0;
-
-    /**
-     * This is the cache container that we intend to use.
-     *
-     * @var CacheInterface
-     */
-    protected $cache = null;
-
-    /**
-     * The amount of time we intend to remember the response for.
-     *
-     * @var int
-     */
-    protected $defaultRemember = 0;
-
-    /**
-     * The amount of seconds to keep things in cache
-     *
-     * @var int
-     */
-    protected $seconds = 0;
 
     /**
      * Should we attach static data to the requests done by this object?
@@ -176,30 +153,6 @@ abstract class AbstractApi {
     }
 
     /**
-     * Sets the amount of seconds we should remember the response for.
-     * Leave it empty (or null) if you want to use the default set for 
-     * each api request.
-     *
-     * @param int $seconds
-     * @param CacheInterface $cache
-     * @chainable
-     */
-    public function remember($seconds = null, CacheInterface $cache = null) {
-        if (is_null($cache)) {
-            // use the built in cache interface
-            $cache = new Cache;
-        }
-        $this->cache = $cache;
-        if (is_null($seconds)) {
-            $this->seconds = $this->defaultRemember;
-        } else {
-            $this->seconds = $seconds;
-        }
-
-        return $this;
-    }
-
-    /**
      * Wraps the request of the api in this method.
      *
      * @param string $path
@@ -226,34 +179,14 @@ abstract class AbstractApi {
 
         $uri = $this->region->getRegion() . '/' . $version . '/' . $path;
 
-        // check cache
-        if ($this->cache instanceof CacheInterface) {
-            $cacheKey = md5($uri . '?' . http_build_query($params));
-            if ($this->cache->has($cacheKey)) {
-                $content = $this->cache->get($cacheKey);
-            } else {
-                // check if we have hit the limit
-                if (!$static AND ! $this->collection->hitLimits()) {
-                    throw new LimitReachedException('You have hit the request limit in your collection.');
-                }
-                $content = $this->client->request($uri, $params);
-
-                // request was succesful
-                ++$this->requests;
-
-                // we want to cache this response
-                $this->cache->set($content, $cacheKey, $this->seconds);
-            }
-        } else {
-            // check if we have hit the limit
-            if (!$static AND ! $this->collection->hitLimits()) {
-                throw new LimitReachedException('You have hit the request limit in your collection.');
-            }
-            $content = $this->client->request($uri, $params);
-
-            // request was succesful
-            ++$this->requests;
+        // check if we have hit the limit
+        if (!$static AND ! $this->collection->hitLimits()) {
+            throw new LimitReachedException('You have hit the request limit in your collection.');
         }
+        $content = $this->client->request($uri, $params);
+
+        // request was succesful
+        ++$this->requests;
 
         // decode the content
         return json_decode($content, true);
