@@ -3,6 +3,7 @@
 namespace LeagueWrap;
 
 use LeagueWrap\Api\AbstractApi;
+use LeagueWrap\ProviderInterface;
 use LeagueWrap\LimitInterface;
 use LeagueWrap\Limit\Limit;
 use LeagueWrap\Limit\Collection;
@@ -28,11 +29,11 @@ class Api {
     protected $region = 'na';
 
     /**
-     * The client used to connect with the riot API.
+     * The provider used to connect with the riot API.
      *
      * @var object
      */
-    protected $client;
+    protected $provider;
 
     /**
      * How long, in seconds, should we remember a query's response.
@@ -63,21 +64,22 @@ class Api {
     private $key;
 
     /**
-     * Initiat the default client and key.
+     * Initiat the default provider and key.
      *
      * @param string $key
      * @throws NoKeyException
      */
-    public function __construct($key = null, ClientInterface $client = null) {
+    public function __construct($key = null, ProviderInterface $provider = null) {
         if (is_null($key)) {
             throw new NoKeyException('We need a key... it\'s very important!');
         }
 
-        if (is_null($client)) {
-            // set up the default client
-            $client = new Client;
+        //If no provider is given setup a Guzzle provider
+        if ($provider === null) {
+            $provider = new Provider\GuzzleProvider(new \GuzzleHttp\Client());
         }
-        $this->client = $client;
+
+        $this->provider = $provider;
 
         // add the key
         $this->key = $key;
@@ -102,7 +104,7 @@ class Api {
             // This class does not exist
             throw new ApiClassNotFoundException('The api class "' . $className . '" was not found.');
         }
-        $api = new $className($this->client, $this->collection, $this);
+        $api = new $className($this->provider, $this->collection, $this);
         if (!$api instanceof AbstractApi) {
             // This is not an api class.
             throw new ApiClassNotFoundException('The api class "' . $className . '" was not found.');

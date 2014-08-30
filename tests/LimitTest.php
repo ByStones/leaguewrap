@@ -6,12 +6,12 @@ class LimitTest extends PHPUnit_Framework_TestCase {
 
     protected $limit1;
     protected $limit2;
-    protected $client;
+    protected $provider;
 
     public function setUp() {
         $this->limit1 = m::mock('LeagueWrap\LimitInterface');
         $this->limit2 = m::mock('LeagueWrap\LimitInterface');
-        $this->client = m::mock('LeagueWrap\Client');
+        $this->provider = m::mock('LeagueWrap\ProviderInterface');
     }
 
     public function tearDown() {
@@ -30,16 +30,14 @@ class LimitTest extends PHPUnit_Framework_TestCase {
                 ->twice()
                 ->with(1)
                 ->andReturn(true, false);
-        $this->client->shouldReceive('baseUrl')
-                ->twice();
-        $this->client->shouldReceive('request')
-                ->with('na/v1.2/champion', [
+        $this->provider->shouldReceive('request')
+                ->with('https://na.api.pvp.net/api/lol/na/v1.2/champion', [
                     'freeToPlay' => 'true',
                     'api_key' => 'key',
                 ])->once()
                 ->andReturn(file_get_contents('tests/Json/champion.free.json'));
 
-        $api = new LeagueWrap\Api('key', $this->client);
+        $api = new LeagueWrap\Api('key', $this->provider);
         $api->limit(1, 10, $this->limit1);
         $champion = $api->champion();
         $champion->free();
@@ -66,16 +64,14 @@ class LimitTest extends PHPUnit_Framework_TestCase {
                 ->times(3)
                 ->with(1)
                 ->andReturn(true, true, false);
-        $this->client->shouldReceive('baseUrl')
-                ->times(3);
-        $this->client->shouldReceive('request')
-                ->with('na/v1.2/champion', [
+        $this->provider->shouldReceive('request')
+                ->with('https://na.api.pvp.net/api/lol/na/v1.2/champion', [
                     'freeToPlay' => 'true',
                     'api_key' => 'key',
                 ])->twice()
                 ->andReturn(file_get_contents('tests/Json/champion.free.json'));
 
-        $api = new LeagueWrap\Api('key', $this->client);
+        $api = new LeagueWrap\Api('key', $this->provider);
         $api->limit(5, 10, $this->limit1);
         $api->limit(2, 5, $this->limit2);
         $champion = $api->champion();

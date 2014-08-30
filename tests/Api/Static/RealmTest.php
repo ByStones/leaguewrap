@@ -1,45 +1,25 @@
 <?php
 
 use LeagueWrap\Api;
-use Mockery as m;
 
-class RealmTest extends PHPUnit_Framework_TestCase {
-
-    protected $client;
-
-    public function setUp() {
-        $client = m::mock('LeagueWrap\Client');
-        $this->client = $client;
-    }
-
-    public function tearDown() {
-        m::close();
-    }
+class RealmTest extends StaticTestCase {
 
     public function testGetRealmNA() {
-        $this->client->shouldReceive('baseUrl')
-                ->once();
-        $this->client->shouldReceive('request')
-                ->with('na/v1.2/realm', [
-                    'api_key' => 'key',
-                ])->once()
-                ->andReturn(file_get_contents('tests/Json/Static/realm.json'));
+        $this->setUpProviderRequest('na/v1.2/realm', [
+            'api_key' => 'key',
+        ], 'realm.json');
 
-        $api = new Api('key', $this->client);
+        $api = new Api('key', $this->provider);
         $na = $api->staticData()->getRealm();
         $this->assertEquals('en_US', $na->l);
     }
 
     public function testGetRealmKR() {
-        $this->client->shouldReceive('baseUrl')
-                ->once();
-        $this->client->shouldReceive('request')
-                ->with('kr/v1.2/realm', [
-                    'api_key' => 'key',
-                ])->once()
-                ->andReturn(file_get_contents('tests/Json/Static/realm.kr.json'));
+        $this->setUpProviderRequest('kr/v1.2/realm', [
+            'api_key' => 'key',
+        ], 'realm.kr.json');
 
-        $api = new Api('key', $this->client);
+        $api = new Api('key', $this->provider);
         $kr = $api->setRegion('kr')
                         ->staticData()->getRealm();
         $this->assertEquals('ko_KR', $kr->l);

@@ -5,7 +5,7 @@ namespace LeagueWrap\Api;
 use LeagueWrap\Dto\Summoner;
 use LeagueWrap\Api;
 use LeagueWrap\Region;
-use LeagueWrap\ClientInterface;
+use LeagueWrap\ProviderInterface;
 use LeagueWrap\Limit\Collection;
 use LeagueWrap\Exception\RegionException;
 use LeagueWrap\Exception\LimitReachedException;
@@ -13,12 +13,7 @@ use LeagueWrap\Exception\InvalidIdentityException;
 
 abstract class AbstractApi {
 
-    /**
-     * The client used to communicate with the api.
-     *
-     * @var ClientInterface
-     */
-    protected $client;
+    protected $provider;
 
     /**
      * The collection of limits to be used on this api.
@@ -81,12 +76,12 @@ abstract class AbstractApi {
     /**
      * Default DI constructor.
      *
-     * @param ClientInterface $client
+     * @param ProviderInterface $provider
      * @param Collection $collection
      * @param Api $api
      */
-    public function __construct(ClientInterface $client, Collection $collection, Api $api) {
-        $this->client = $client;
+    public function __construct(ProviderInterface $provider, Collection $collection, Api $api) {
+        $this->provider = $provider;
         $this->collection = $collection;
         $this->api = $api;
     }
@@ -171,19 +166,16 @@ abstract class AbstractApi {
             throw new RegionException('The region "' . $this->region->getRegion() . '" is not permited to query this API.');
         }
 
-        // set the region based domain
-        $this->client->baseUrl($this->region->getDomain($static));
-
         // add the key to the param list
         $params['api_key'] = $this->key;
 
-        $uri = $this->region->getRegion() . '/' . $version . '/' . $path;
+        $uri = $this->region->getDomain($static) . $this->region->getRegion() . '/' . $version . '/' . $path;
 
         // check if we have hit the limit
         if (!$static AND ! $this->collection->hitLimits()) {
             throw new LimitReachedException('You have hit the request limit in your collection.');
         }
-        $content = $this->client->request($uri, $params);
+        $content = $this->provider->request($uri, $params);
 
         // request was succesful
         ++$this->requests;

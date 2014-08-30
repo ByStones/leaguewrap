@@ -1,64 +1,46 @@
 <?php
 
 use LeagueWrap\Api;
-use Mockery as m;
 
-class ApiSummonerTest extends PHPUnit_Framework_TestCase {
-
-    protected $client;
-
-    public function setUp() {
-        $client = m::mock('LeagueWrap\Client');
-        $this->client = $client;
-    }
-
-    public function tearDown() {
-        m::close();
-    }
+class ApiSummonerTest extends TestCase {
 
     public function testInfo() {
-        $this->client->shouldReceive('baseUrl')
-                ->once();
-        $this->client->shouldReceive('request')
-                ->with('na/v1.4/summoner/by-name/bakasan', [
+        $this->provider->shouldReceive('request')
+                ->with('https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/bakasan', [
                     'api_key' => 'key',
                 ])->once()
                 ->andReturn(file_get_contents('tests/Json/summoner.bakasan.json'));
 
-        $api = new Api('key', $this->client);
+        $api = new Api('key', $this->provider);
         $bakasan = $api->summoner()->info('bakasan');
         $this->assertEquals(74602, $bakasan->id);
     }
 
     public function testInfoId() {
-        $this->client->shouldReceive('baseUrl')
-                ->once();
-        $this->client->shouldReceive('request')
-                ->with('na/v1.4/summoner/74602', [
+        $this->provider->shouldReceive('request')
+                ->with('https://na.api.pvp.net/api/lol/na/v1.4/summoner/74602', [
                     'api_key' => 'key',
                 ])->once()
                 ->andReturn(file_get_contents('tests/Json/summoner.74602.json'));
 
-        $api = new Api('key', $this->client);
+        $api = new Api('key', $this->provider);
         $bakasan = $api->summoner()->info(74602);
         $this->assertEquals('bakasan', $bakasan->name);
     }
 
     public function testInfoMixed() {
-        $this->client->shouldReceive('baseUrl')
-                ->twice();
-        $this->client->shouldReceive('request')
-                ->with('na/v1.4/summoner/by-name/bakasan', [
+        $this->provider->shouldReceive('request')
+                ->with('https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/bakasan', [
                     'api_key' => 'key',
                 ])->once()
                 ->andReturn(file_get_contents('tests/Json/summoner.bakasan.json'));
-        $this->client->shouldReceive('request')
-                ->with('na/v1.4/summoner/7024,97235', [
+        $this->provider->shouldReceive('request')
+                ->with('https://na.api.pvp.net/api/lol/na/v1.4/summoner/7024,97235', [
                     'api_key' => 'key',
                 ])->once()
                 ->andReturn(file_get_contents('tests/Json/summoner.7024,97235.json'));
 
-        $api = new Api('key', $this->client);
+        $api = new Api('key', $this->provider);
         $summoners = $api->summoner()->info([
             'bakasan',
             7024,
@@ -68,20 +50,18 @@ class ApiSummonerTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testInfoStrict() {
-        $this->client->shouldReceive('baseUrl')
-                ->twice();
-        $this->client->shouldReceive('request')
-                ->with('na/v1.4/summoner/by-name/1337', [
+        $this->provider->shouldReceive('request')
+                ->with('https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/1337', [
                     'api_key' => 'key',
                 ])->once()
                 ->andReturn(file_get_contents('tests/Json/summoner.1337.json'));
-        $this->client->shouldReceive('request')
-                ->with('na/v1.4/summoner/74602', [
+        $this->provider->shouldReceive('request')
+                ->with('https://na.api.pvp.net/api/lol/na/v1.4/summoner/74602', [
                     'api_key' => 'key',
                 ])->once()
                 ->andReturn(file_get_contents('tests/Json/summoner.74602.json'));
 
-        $api = new Api('key', $this->client);
+        $api = new Api('key', $this->provider);
         $summoners = $api->summoner()->info([
             '1337',
             74602
@@ -91,29 +71,25 @@ class ApiSummonerTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testName() {
-        $this->client->shouldReceive('baseUrl')
-                ->once();
-        $this->client->shouldReceive('request')
-                ->with('na/v1.4/summoner/74602/name', [
+        $this->provider->shouldReceive('request')
+                ->with('https://na.api.pvp.net/api/lol/na/v1.4/summoner/74602/name', [
                     'api_key' => 'key',
                 ])->once()
                 ->andReturn(file_get_contents('tests/Json/summoner.name.74602.json'));
 
-        $api = new Api('key', $this->client);
+        $api = new Api('key', $this->provider);
         $names = $api->summoner()->name(74602);
         $this->assertEquals('bakasan', $names[74602]);
     }
 
     public function testNameArray() {
-        $this->client->shouldReceive('baseUrl')
-                ->once();
-        $this->client->shouldReceive('request')
-                ->with('na/v1.4/summoner/74602,7024,97235/name', [
+        $this->provider->shouldReceive('request')
+                ->with('https://na.api.pvp.net/api/lol/na/v1.4/summoner/74602,7024,97235/name', [
                     'api_key' => 'key',
                 ])->once()
                 ->andReturn(file_get_contents('tests/Json/summoner.name.74602,7024,97235.json'));
 
-        $api = new Api('key', $this->client);
+        $api = new Api('key', $this->provider);
         $names = $api->summoner()->name([
             74602,
             7024,
@@ -123,68 +99,60 @@ class ApiSummonerTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testRunes() {
-        $this->client->shouldReceive('baseUrl')
-                ->once();
-        $this->client->shouldReceive('request')
-                ->with('na/v1.4/summoner/74602/runes', [
+        $this->provider->shouldReceive('request')
+                ->with('https://na.api.pvp.net/api/lol/na/v1.4/summoner/74602/runes', [
                     'api_key' => 'key',
                 ])->once()
                 ->andReturn(file_get_contents('tests/Json/summoner.runes.74602.json'));
 
-        $api = new Api('key', $this->client);
+        $api = new Api('key', $this->provider);
         $runes = $api->summoner()->runePages(74602);
         $this->assertTrue($runes[0] instanceof LeagueWrap\Dto\RunePage);
     }
 
     public function testRuneArrayAccess() {
-        $this->client->shouldReceive('baseUrl')
-                ->once();
-        $this->client->shouldReceive('request')
-                ->with('na/v1.4/summoner/74602/runes', [
+        $this->provider->shouldReceive('request')
+                ->with('https://na.api.pvp.net/api/lol/na/v1.4/summoner/74602/runes', [
                     'api_key' => 'key',
                 ])->once()
                 ->andReturn(file_get_contents('tests/Json/summoner.runes.74602.json'));
 
-        $api = new Api('key', $this->client);
+        $api = new Api('key', $this->provider);
         $runes = $api->summoner()->runePages(74602);
         $this->assertTrue($runes[0][30] instanceof LeagueWrap\Dto\Rune);
     }
 
     public function testRunesSummoner() {
-        $this->client->shouldReceive('baseUrl')
-                ->twice();
-        $this->client->shouldReceive('request')
-                ->with('na/v1.4/summoner/74602/runes', [
+        $this->provider->shouldReceive('request')
+                ->with('https://na.api.pvp.net/api/lol/na/v1.4/summoner/74602/runes', [
                     'api_key' => 'key',
                 ])->once()
                 ->andReturn(file_get_contents('tests/Json/summoner.runes.74602.json'));
-        $this->client->shouldReceive('request')
-                ->with('na/v1.4/summoner/74602', [
+        $this->provider->shouldReceive('request')
+                ->with('https://na.api.pvp.net/api/lol/na/v1.4/summoner/74602', [
                     'api_key' => 'key',
                 ])->once()
                 ->andReturn(file_get_contents('tests/Json/summoner.74602.json'));
 
-        $api = new Api('key', $this->client);
+        $api = new Api('key', $this->provider);
         $bakasan = $api->summoner()->info(74602);
         $api->summoner()->runePages($bakasan);
         $this->assertEquals(5317, $bakasan->runePage(1)->rune(15)->runeId);
     }
 
     public function testRunesSummonerArray() {
-        $this->client->shouldReceive('baseUrl')
-                ->twice();
-        $this->client->shouldReceive('request')
-                ->with('na/v1.4/summoner/97235,7024/runes', [
+        $this->provider->shouldReceive('request')
+                ->with('https://na.api.pvp.net/api/lol/na/v1.4/summoner/97235,7024/runes', [
                     'api_key' => 'key',
                 ])->once()
                 ->andReturn(file_get_contents('tests/Json/summoner.runes.7024,97235.json'));
-        $this->client->shouldReceive('request')
-                ->with('na/v1.4/summoner/7024,97235', [
+        $this->provider->shouldReceive('request')
+                ->with('https://na.api.pvp.net/api/lol/na/v1.4/summoner/7024,97235', [
                     'api_key' => 'key',
                 ])->once()
                 ->andReturn(file_get_contents('tests/Json/summoner.7024,97235.json'));
 
-        $api = new Api('key', $this->client);
+        $api = new Api('key', $this->provider);
         $summoners = $api->summoner()->info([
             7024,
             97235,
@@ -194,68 +162,60 @@ class ApiSummonerTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testMasteries() {
-        $this->client->shouldReceive('baseUrl')
-                ->once();
-        $this->client->shouldReceive('request')
-                ->with('na/v1.4/summoner/74602/masteries', [
+        $this->provider->shouldReceive('request')
+                ->with('https://na.api.pvp.net/api/lol/na/v1.4/summoner/74602/masteries', [
                     'api_key' => 'key',
                 ])->once()
                 ->andReturn(file_get_contents('tests/Json/summoner.masteries.74602.json'));
 
-        $api = new Api('key', $this->client);
+        $api = new Api('key', $this->provider);
         $masteries = $api->summoner()->masteryPages(74602);
         $this->assertTrue($masteries[0] instanceof LeagueWrap\Dto\MasteryPage);
     }
 
     public function testMasteriesArrayAccess() {
-        $this->client->shouldReceive('baseUrl')
-                ->once();
-        $this->client->shouldReceive('request')
-                ->with('na/v1.4/summoner/74602/masteries', [
+        $this->provider->shouldReceive('request')
+                ->with('https://na.api.pvp.net/api/lol/na/v1.4/summoner/74602/masteries', [
                     'api_key' => 'key',
                 ])->once()
                 ->andReturn(file_get_contents('tests/Json/summoner.masteries.74602.json'));
 
-        $api = new Api('key', $this->client);
+        $api = new Api('key', $this->provider);
         $masteries = $api->summoner()->masteryPages(74602);
         $this->assertTrue($masteries[0][4342] instanceof LeagueWrap\Dto\Mastery);
     }
 
     public function testMasteriesSummoner() {
-        $this->client->shouldReceive('baseUrl')
-                ->twice();
-        $this->client->shouldReceive('request')
-                ->with('na/v1.4/summoner/74602/masteries', [
+        $this->provider->shouldReceive('request')
+                ->with('https://na.api.pvp.net/api/lol/na/v1.4/summoner/74602/masteries', [
                     'api_key' => 'key',
                 ])->once()
                 ->andReturn(file_get_contents('tests/Json/summoner.masteries.74602.json'));
-        $this->client->shouldReceive('request')
-                ->with('na/v1.4/summoner/74602', [
+        $this->provider->shouldReceive('request')
+                ->with('https://na.api.pvp.net/api/lol/na/v1.4/summoner/74602', [
                     'api_key' => 'key',
                 ])->once()
                 ->andReturn(file_get_contents('tests/Json/summoner.74602.json'));
 
-        $api = new Api('key', $this->client);
+        $api = new Api('key', $this->provider);
         $bakasan = $api->summoner()->info(74602);
         $api->summoner()->masteryPages($bakasan);
         $this->assertEquals(2, $bakasan->masteryPage(1)->mastery(4212)->rank);
     }
 
     public function testMasteriesSummonerArray() {
-        $this->client->shouldReceive('baseUrl')
-                ->times(2);
-        $this->client->shouldReceive('request')
-                ->with('na/v1.4/summoner/97235,7024/masteries', [
+        $this->provider->shouldReceive('request')
+                ->with('https://na.api.pvp.net/api/lol/na/v1.4/summoner/97235,7024/masteries', [
                     'api_key' => 'key',
                 ])->once()
                 ->andReturn(file_get_contents('tests/Json/summoner.masteries.7024,97235.json'));
-        $this->client->shouldReceive('request')
-                ->with('na/v1.4/summoner/7024,97235', [
+        $this->provider->shouldReceive('request')
+                ->with('https://na.api.pvp.net/api/lol/na/v1.4/summoner/7024,97235', [
                     'api_key' => 'key',
                 ])->once()
                 ->andReturn(file_get_contents('tests/Json/summoner.7024,97235.json'));
 
-        $api = new Api('key', $this->client);
+        $api = new Api('key', $this->provider);
         $summoners = $api->summoner()->info([
             7024,
             97235,
