@@ -55,6 +55,23 @@ class ApiChampionTest extends TestCase {
         $this->assertEquals(10, count($free->champions));
     }
 
+    public function testFreeWillNotBeStoredPermanently() {
+        $this->setUpProviderRequest('na', 'na/v1.2/champion', [
+            'freeToPlay' => 'true',
+            'api_key' => 'key',
+        ], 'champion.free.json');
+
+        $this->setUpProviderRequest('na', 'na/v1.2/champion', [
+            'freeToPlay' => 'false',
+            'api_key' => 'key',
+        ], 'champion.json');
+
+        $api = new Api('key', $this->provider);
+        $champion = $api->champion();
+
+        $this->assertNotEquals($champion->free(), $champion->all());
+    }
+
     public function testFreeCountable() {
         $this->setUpProviderRequest('na', 'na/v1.2/champion', [
             'freeToPlay' => 'true',

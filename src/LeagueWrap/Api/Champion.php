@@ -46,7 +46,6 @@ class Champion extends AbstractApi {
     /**
      * Gets all the free champions for this week.
      *
-     * @uses $this->all()
      * @return championList
      */
     public function free() {
