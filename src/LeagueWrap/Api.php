@@ -91,9 +91,9 @@ class Api {
     }
 
     public function __get($property) {
-        $className = 'LeagueWrap\Api\\' . ucfirst(strtolower($property));
+        $className = 'LeagueWrap\Method\\' . ucfirst(strtolower($property)). 'Method';
 
-        if (!class_exists($className) || !is_subclass_of($className, 'LeagueWrap\Api\AbstractApi')) {
+        if (!class_exists($className) || !is_subclass_of($className, 'LeagueWrap\Method\AbstractMethod')) {
             throw new ApiMethodNotFoundException('The api method "' . $property . '" does not exist or is not valid');
         }
 

@@ -17,6 +17,7 @@ ini_set('display_errors', '1');
 require __DIR__.'/vendor/autoload.php';
 require __DIR__ . '/tests/Api/Static/StaticTestCase.php';
 require __DIR__ . '/tests/Api/TestCase.php';
+require __DIR__ . '/tests/Method/MethodTestCase.php';
 
 /*
 |--------------------------------------------------------------------------
