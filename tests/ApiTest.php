@@ -7,7 +7,7 @@ class ApiTest extends PHPUnit_Framework_TestCase {
     public function testApiReturnsChampionApiMethodOnGet() {
         $api = new Api('key');
 
-        $this->assertTrue($api->champion instanceof LeagueWrap\Api\Champion);
+        $this->assertTrue($api->champion instanceof LeagueWrap\Method\ChampionMethod);
     }
 
     public function testApiCachesApiMethod() {
