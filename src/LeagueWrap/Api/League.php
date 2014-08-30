@@ -35,13 +35,6 @@ class League extends AbstractApi {
     ];
 
     /**
-     * The amount of time we intend to remember the response for.
-     *
-     * @var int
-     */
-    protected $defaultRemember = 43200;
-
-    /**
      * Gets the league information by summoner id or list of summoner ids. To only
      * get the single entry information for the summoner(s) ensure that $entry
      * is set to true.
@@ -52,10 +45,8 @@ class League extends AbstractApi {
      * @throws ListMaxException
      */
     public function league($identities, $entry = false) {
-        if (is_array($identities)) {
-            if (count($identities) > 10) {
-                throw new ListMaxException('This request can only support a list of 10 elements, ' . count($identities) . ' given.');
-            }
+        if (is_array($identities) && count($identities) > 10) {
+            throw new ListMaxException('This request can only support a list of 10 elements, ' . count($identities) . ' given.');
         }
 
         $ids = $this->extractIds($identities);
@@ -82,11 +73,7 @@ class League extends AbstractApi {
 
         $this->attachResponses($identities, $summoners, 'leagues');
 
-        if (is_array($identities)) {
-            return $summoners;
-        } else {
-            return reset($summoners);
-        }
+        return is_array($identities) ? $summoners : reset($summoners);
     }
 
     /**
@@ -98,6 +85,7 @@ class League extends AbstractApi {
     public function challenger($type = 'RANKED_SOLO_5x5') {
         $info = $this->request('league/challenger', ['type' => $type]);
         $info['id'] = null;
+
         return new Dto\League($info);
     }
 

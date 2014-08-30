@@ -42,13 +42,6 @@ class Team extends AbstractApi {
     ];
 
     /**
-     * The amount of time we intend to remember the response for.
-     *
-     * @var int
-     */
-    protected $defaultRemember = 43200;
-
-    /**
      * Gets the team information by summoner id or list of summoner ids.
      *
      * @param mixed $identity
@@ -56,10 +49,8 @@ class Team extends AbstractApi {
      * @throws ListMaxException
      */
     public function team($identities) {
-        if (is_array($identities)) {
-            if (count($identities) > 10) {
-                throw new ListMaxException('This request can only support a list of 10 elements, ' . count($identities) . ' given.');
-            }
+        if (is_array($identities) && count($identities) > 10) {
+            throw new ListMaxException('This request can only support a list of 10 elements, ' . count($identities) . ' given.');
         }
 
         $ids = $this->extractIds($identities);
@@ -84,11 +75,7 @@ class Team extends AbstractApi {
 
         $this->attachResponses($identities, $summoners, 'teams');
 
-        if (is_array($identities)) {
-            return $summoners;
-        } else {
-            return reset($summoners);
-        }
+        return is_array($identities) ? $summoners : reset($summoners);
     }
 
 }

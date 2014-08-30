@@ -46,13 +46,6 @@ class Summoner extends AbstractApi {
     ];
 
     /**
-     * The amount of time we intend to remember the response for.
-     *
-     * @var int
-     */
-    protected $defaultRemember = 600;
-
-    /**
      * Attempt to get a summoner by key.
      *
      * @param string $key
@@ -70,9 +63,10 @@ class Summoner extends AbstractApi {
      */
     public function get($key) {
         $key = strtolower($key);
-        if (isset($this->summoners[$key])) {
+        if (array_key_exists($key, $this->summoners)) {
             return $this->summoners[$key];
         }
+
         return null;
     }
 
@@ -125,11 +119,7 @@ class Summoner extends AbstractApi {
 
         $summoners = $ids + $names;
 
-        if (count($summoners) == 1) {
-            return reset($summoners);
-        } else {
-            return $summoners;
-        }
+        return count($summoners) === 1 ? reset($summoners) : $summoners;
     }
 
     /**
@@ -158,12 +148,8 @@ class Summoner extends AbstractApi {
         $ids = implode(',', $ids);
 
         $array = $this->request('summoner/' . $ids . '/name');
-        $names = [];
-        foreach ($array as $id => $name) {
-            $names[$id] = $name;
-        }
 
-        return $names;
+        return $array;
     }
 
     /**
@@ -205,12 +191,8 @@ class Summoner extends AbstractApi {
         }
 
         $this->attachResponses($identities, $summoners, 'runePages');
-        if (count($summoners) == 1) {
-            $runePages = reset($summoners);
-            return $runePages;
-        } else {
-            return $summoners;
-        }
+
+        return count($summoners) === 1 ? reset($summoners) : $summoners;
     }
 
     /**
@@ -250,12 +232,8 @@ class Summoner extends AbstractApi {
         }
 
         $this->attachResponses($identities, $summoners, 'masteryPages');
-        if (count($summoners) == 1) {
-            $masteryPages = reset($summoners);
-            return $masteryPages;
-        } else {
-            return $summoners;
-        }
+
+        return count($summoners) === 1 ? reset($summoners) : $summoners;
     }
 
     /**
@@ -281,11 +259,7 @@ class Summoner extends AbstractApi {
             $summoners[$name] = $summoner;
         }
 
-        if (count($summoners) == 1) {
-            return reset($summoners);
-        } else {
-            return $summoners;
-        }
+        return count($summoners) === 1 ? reset($summoners) : $summoners;
     }
 
     /**
@@ -313,11 +287,7 @@ class Summoner extends AbstractApi {
             $summoners[$name] = $summoner;
         }
 
-        if (count($summoners) == 1) {
-            return reset($summoners);
-        } else {
-            return $summoners;
-        }
+        return count($summoners) === 1 ? reset($summoners) : $summoners;
     }
 
 }

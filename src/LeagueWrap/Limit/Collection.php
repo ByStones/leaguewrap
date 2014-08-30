@@ -26,8 +26,7 @@ class Collection {
         $remaining = null;
         foreach ($this->limits as $limit) {
             $hitsLeft = $limit->remaining();
-            if (is_null($remaining) or
-                    $hitsLeft < $remaining) {
+            if (is_null($remaining) || $hitsLeft < $remaining) {
                 $remaining = $hitsLeft;
             }
         }

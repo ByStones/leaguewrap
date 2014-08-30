@@ -34,13 +34,6 @@ class Game extends AbstractApi {
     ];
 
     /**
-     * The amount of time we intend to remember the response for.
-     *
-     * @var int
-     */
-    protected $defaultRemember = 1800;
-
-    /**
      * Get the recent games by summoner id.
      *
      * @param mixed $id

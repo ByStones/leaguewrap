@@ -32,13 +32,6 @@ class Match extends AbstractApi {
     ];
 
     /**
-     * The amount of time we intend to remember the response for.
-     *
-     * @var int
-     */
-    protected $defaultRemember = 1800;
-
-    /**
      * Get the match by match id.
      *
      * @param int $id
@@ -46,10 +39,12 @@ class Match extends AbstractApi {
      * @return Match
      */
     public function match($id, $includeTimeline = false) {
-        if ($includeTimeline)
+        if ($includeTimeline) {
             $response = $this->request('match/' . $id, array('includeTimeline' => $includeTimeline));
-        else
+        } else {
             $response = $this->request('match/' . $id);
+        }
+
         return new \LeagueWrap\Dto\Match($response);
     }
 

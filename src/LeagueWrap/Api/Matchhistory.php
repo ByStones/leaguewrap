@@ -32,13 +32,6 @@ class Matchhistory extends AbstractApi {
     ];
 
     /**
-     * The amount of time we intend to remember the response for.
-     *
-     * @var int
-     */
-    protected $defaultRemember = 1800;
-
-    /**
      * Get the match history by summoner id.
      *
      * @param mixed $id

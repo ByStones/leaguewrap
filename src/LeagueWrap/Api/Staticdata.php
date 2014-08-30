@@ -60,13 +60,6 @@ class Staticdata extends AbstractApi {
     ];
 
     /**
-     * The amount of time we intend to remember the response for.
-     *
-     * @var int
-     */
-    protected $defaultRemember = 86400;
-
-    /**
      * Sets the locale the data should be returned in. Null returns
      * the default local for that region.
      *
@@ -114,11 +107,7 @@ class Staticdata extends AbstractApi {
         $params = $this->setUpParams($id, $data, 'champData');
         $array = $this->makeRequest('champion', $id, $params);
 
-        if ($this->appendId($id)) {
-            return new staticChampion($array);
-        } else {
-            return new ChampionList($array);
-        }
+        return $this->appendId($id) ? new staticChampion($array) : new ChampionList($array);
     }
 
     /**
@@ -143,11 +132,7 @@ class Staticdata extends AbstractApi {
         $params = $this->setUpParams($id, $data, 'itemListData', 'itemData');
         $array = $this->makeRequest('item', $id, $params);
 
-        if ($this->appendId($id)) {
-            return new staticItem($array);
-        } else {
-            return new ItemList($array);
-        }
+        return $this->appendId($id) ? new staticItem($array) : new ItemList($array);
     }
 
     /**
@@ -172,11 +157,7 @@ class Staticdata extends AbstractApi {
         $params = $this->setUpParams($id, $data, 'masteryListData', 'masteryData');
         $array = $this->makeRequest('mastery', $id, $params);
 
-        if ($this->appendId($id)) {
-            return new staticMastery($array);
-        } else {
-            return new MasteryList($array);
-        }
+        return $this->appendId($id) ? new staticMastery($array) : new MasteryList($array);
     }
 
     /**
@@ -201,11 +182,7 @@ class Staticdata extends AbstractApi {
         $params = $this->setUpParams($id, $data, 'runeListData', 'runeData');
         $array = $this->makeRequest('rune', $id, $params);
 
-        if ($this->appendId($id)) {
-            return new staticRune($array);
-        } else {
-            return new RuneList($array);
-        }
+        return $this->appendId($id) ? new staticRune($array) : new RuneList($array);
     }
 
     /**
@@ -230,11 +207,7 @@ class Staticdata extends AbstractApi {
         $params = $this->setUpParams($id, $data, 'spellData');
         $array = $this->makeRequest('summoner-spell', $id, $params);
 
-        if ($this->appendId($id)) {
-            return new staticSummonerSpell($array);
-        } else {
-            return new SummonerSpellList($array);
-        }
+        return $this->appendId($id) ? new staticSummonerSpell($array) : new SummonerSpellList($array);
     }
 
     /**
@@ -317,12 +290,7 @@ class Staticdata extends AbstractApi {
      * @return bool
      */
     protected function appendId($id) {
-        if (!is_null($id) AND
-                $id != 'all') {
-            return true;
-        }
-
-        return false;
+        return !is_null($id) && $id != 'all';
     }
 
 }

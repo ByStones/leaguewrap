@@ -36,13 +36,6 @@ class Api {
     protected $provider;
 
     /**
-     * How long, in seconds, should we remember a query's response.
-     *
-     * @var int
-     */
-    protected $remember = null;
-
-    /**
      * The collection of limits to be used for all requests in this api.
      *
      * @var Collection
@@ -85,7 +78,7 @@ class Api {
         $this->key = $key;
 
         // set up the limit collection
-        $this->collection = new Collection;
+        $this->collection = new Collection();
     }
 
     /**
@@ -125,6 +118,7 @@ class Api {
      */
     public function setRegion($region) {
         $this->region = $region;
+
         return $this;
     }
 
@@ -137,14 +131,15 @@ class Api {
      * @chainable
      */
     public function limit($hits, $seconds, LimitInterface $limit = null) {
-        if (is_null($limit)) {
+        if ($limit === null) {
             // use the built in limit interface
-            $limit = new Limit;
+            $limit = new Limit();
         }
 
         $limit->setRate($hits, $seconds);
 
         $this->collection->addLimit($limit);
+
         return $this;
     }
 
@@ -164,6 +159,7 @@ class Api {
      */
     public function attachStaticData($attach = true) {
         $this->attachStaticData = $attach;
+
         return $this;
     }
 

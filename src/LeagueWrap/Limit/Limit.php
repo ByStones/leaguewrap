@@ -12,15 +12,20 @@ class Limit implements LimitInterface {
     protected $seconds;
     protected $memcached;
 
-    public function __construct() {
-        $this->memcached = new Memcached;
-        $this->memcached->addServer('localhost', 11211, 100);
+    public function __construct(Memcached $memcached = null) {
+        if ($memcached === null) {
+            $memcached = new Memcached;
+            $memcached->addServer('localhost', 11211, 100);
+        }
+
+        $this->memcached = $memcached;
     }
 
     public function setRate($hits, $seconds) {
         $this->key = 'leagueWrap.hits.' . $hits . 'x' . $seconds;
         $this->hits = (int) $hits;
         $this->seconds = (int) $seconds;
+
         return true;
     }
 

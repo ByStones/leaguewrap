@@ -43,13 +43,6 @@ class Stats extends AbstractApi {
     ];
 
     /**
-     * The amount of time we intend to remember the response for.
-     *
-     * @var int
-     */
-    protected $defaultRemember = 600;
-
-    /**
      * Sets the season param to the given input.
      *
      * @param string $season
@@ -57,6 +50,7 @@ class Stats extends AbstractApi {
      */
     public function setSeason($season) {
         $this->season = trim(strtoupper($season));
+
         return $this;
     }
 

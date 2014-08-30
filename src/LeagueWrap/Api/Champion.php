@@ -8,13 +8,6 @@ use LeagueWrap\Dto\ChampionList;
 class Champion extends AbstractApi {
 
     /**
-     * Do we want to only get the free champions?
-     *
-     * @param string
-     */
-    protected $free = 'false';
-
-    /**
      * Valid versions for this api call.
      *
      * @var array
@@ -42,20 +35,13 @@ class Champion extends AbstractApi {
     ];
 
     /**
-     * The amount of time we intend to remember the response for.
-     *
-     * @var int
-     */
-    protected $defaultRemember = 86400;
-
-    /**
      * Gets all the champions in the given region.
      *
      * @return ChampionList
      */
     public function all() {
         $params = [
-            'freeToPlay' => $this->free,
+            'freeToPlay' => 'false',
         ];
 
         $array = $this->request('champion', $params);
@@ -82,8 +68,14 @@ class Champion extends AbstractApi {
      * @return championList
      */
     public function free() {
-        $this->free = 'true';
-        return $this->all();
+        $params = [
+            'freeToPlay' => 'true',
+        ];
+
+        $array = $this->request('champion', $params);
+
+        // set up the champions
+        return new ChampionList($array);
     }
 
 }
