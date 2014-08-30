@@ -9,6 +9,7 @@ use LeagueWrap\Limit\Limit;
 use LeagueWrap\Limit\Collection;
 use LeagueWrap\Exception\NoKeyException;
 use LeagueWrap\Exception\ApiClassNotFoundException;
+use LeagueWrap\Exception\ApiMethodNotFoundException;
 
 /**
  * @method \LeagueWrap\Api\Champion champion()
@@ -57,6 +58,14 @@ class Api {
     private $key;
 
     /**
+     * Previously created API methods will be stored here, so they do not need
+     * to be created twice.
+     *
+     * @var array
+     */
+    protected $apiMethodCache = [];
+
+    /**
      * Initiat the default provider and key.
      *
      * @param string $key
@@ -64,7 +73,7 @@ class Api {
      */
     public function __construct($key = null, ProviderInterface $provider = null) {
         if (is_null($key)) {
-            throw new NoKeyException('We need a key... it\'s very important!');
+            throw new NoKeyException('No API key was given');
         }
 
         //If no provider is given setup a Guzzle provider
@@ -79,6 +88,25 @@ class Api {
 
         // set up the limit collection
         $this->collection = new Collection();
+    }
+
+    public function __get($property) {
+        $className = 'LeagueWrap\Api\\' . ucfirst(strtolower($property));
+
+        if (!class_exists($className) || !is_subclass_of($className, 'LeagueWrap\Api\AbstractApi')) {
+            throw new ApiMethodNotFoundException('The api method "' . $property . '" does not exist or is not valid');
+        }
+
+        if (array_key_exists($className, $this->apiMethodCache)) {
+            return $this->apiMethodCache[$className];
+        }
+
+        $api = new $className($this->provider, $this->collection, $this);
+        $api->setKey($this->key)->setRegion($this->region)->attachStaticData($this->attachStaticData);
+
+        $this->apiMethodCache[$className] = $api;
+
+        return $api;
     }
 
     /**

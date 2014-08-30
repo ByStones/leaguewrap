@@ -1,9 +1,30 @@
 <?php
 
 use LeagueWrap\Api;
-use Mockery as m;
 
 class ApiTest extends PHPUnit_Framework_TestCase {
+
+    public function testApiReturnsChampionApiMethodOnGet() {
+        $api = new Api('key');
+
+        $this->assertTrue($api->champion instanceof LeagueWrap\Api\Champion);
+    }
+
+    public function testApiCachesApiMethod() {
+        $api = new Api('key');
+
+        $champion1 = $api->champion;
+        $champion2 = $api->champion;
+
+        $this->assertSame($champion1, $champion2);
+    }
+
+    public function testApiGetterThrowsExceptionOnUnknownMethod() {
+        $api = new Api('key');
+
+        $this->setExpectedException('LeagueWrap\Exception\ApiMethodNotFoundException');
+        $api->unknown;
+    }
 
     public function testChampion() {
         $api = new Api('key');
