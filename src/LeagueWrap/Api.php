@@ -102,7 +102,7 @@ class Api {
         }
 
         $api = new $className($this->provider, $this->collection, $this);
-        $api->setKey($this->key)->setRegion($this->region)->attachStaticData($this->attachStaticData);
+        $api->setKey($this->key)->setRegion($this->region);
 
         $this->apiMethodCache[$className] = $api;
 

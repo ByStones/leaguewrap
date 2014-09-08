@@ -115,6 +115,7 @@ abstract class AbstractMethod {
      */
     public function setKey($key) {
         $this->key = $key;
+
         return $this;
     }
 
@@ -130,48 +131,9 @@ abstract class AbstractMethod {
         return $this;
     }
 
-    /**
-     * Set wether to attach static data to the response.
-     *
-     * @param bool $attach
-     * @chainable
-     */
-    public function attachStaticData($attach = true) {
-        $this->attachStaticData = $attach;
-        return $this;
-    }
-
-    /**
-     * Select the version of the api you wish to
-     * query.
-     *
-     * @param string $version
-     * @return bool|$this
-     * @chainable
-     */
-    public function selectVersion($version) {
-        if (!in_array($version, $this->versions)) {
-            // not a value version
-            return false;
-        }
-
-        $this->version = $version;
-        return $this;
-    }
-
-    /**
-     * Wraps the request of the api in this method.
-     *
-     * @param string $path
-     * @param array $params
-     * @param bool $static
-     * @return array
-     * @throws RegionException
-     * @throws LimitReachedException
-     */
     protected function request($path, $params = [], $static = false) {
         // get version
-        $version = $this->getVersion();
+        $version = reset($this->versions);
 
         // get and validate the region
         if (!in_array($this->region->getRegion(), $this->permittedRegions)) {
@@ -194,113 +156,6 @@ abstract class AbstractMethod {
 
         // decode the content
         return json_decode($content, true);
-    }
-
-    /**
-     * Get the version string.
-     *
-     * @return string
-     */
-    protected function getVersion() {
-        if (is_null($this->version)) {
-            // get the first version in versions
-            $this->version = reset($this->versions);
-        }
-
-        return $this->version;
-    }
-
-    /**
-     * Attempts to extract an ID from the object/value given
-     *
-     * @param mixed $identity
-     * @return int
-     * @throws InvalidIdentityException
-     */
-    protected function extractId($identity) {
-        if ($identity instanceof Summoner) {
-            return $identity->id;
-        } elseif (filter_var($identity, FILTER_VALIDATE_INT) !== FALSE) {
-            return $identity;
-        } else {
-            throw new InvalidIdentityException("The identity '$identity' is not valid.");
-        }
-    }
-
-    /**
-     * Attempts to extract an ID from the array given.
-     *
-     * @param mixed $identities
-     * @return array
-     * @uses extractId()
-     */
-    protected function extractIds($identities) {
-        $ids = [];
-        if (is_array($identities)) {
-            foreach ($identities as $identity) {
-                $ids[] = $this->extractId($identity);
-            }
-        } else {
-            $ids[] = $this->extractId($identities);
-        }
-
-        return $ids;
-    }
-
-    /**
-     * Attempts to attach the response to a summoner object.
-     *
-     * @param mixed $identity
-     * @param mixed $response
-     * @param string $key
-     * @return bool
-     */
-    protected function attachResponse($identity, $response, $key) {
-        if ($identity instanceof Summoner) {
-            $identity->set($key, $response);
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Attempts to attach all the responses to the correct summoner.
-     *
-     * @param mixed $identity
-     * @param mixed $responses
-     * @param string $key
-     * @return bool
-     */
-    protected function attachResponses($identities, $responses, $key) {
-        if (is_array($identities)) {
-            foreach ($identities as $identity) {
-                if ($identity instanceof Summoner) {
-                    $id = $identity->id;
-                    if (isset($responses[$id])) {
-                        $response = $responses[$id];
-                        $this->attachResponse($identity, $response, $key);
-                    } else {
-                        // we did not get a response for this id, attach null
-                        $this->attachResponse($identity, null, $key);
-                    }
-                }
-            }
-        } else {
-            $identity = $identities;
-            if ($identity instanceof Summoner) {
-                $id = $identity->id;
-                if (isset($responses[$id])) {
-                    $response = $responses[$id];
-                    $this->attachResponse($identity, $response, $key);
-                } else {
-                    // we did not get a response for this id, attach null
-                    $this->attachResponse($identity, null, $key);
-                }
-            }
-        }
-
-        return true;
     }
 
 }
