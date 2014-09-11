@@ -67,6 +67,22 @@ class StaticdataMethod extends AbstractMethod {
         return $this;
     }
 
+    const CHAMPION_DATA_ALL = 'all';
+    const CHAMPION_DATA_ALLYTIPS = 'allytips';
+    const CHAMPION_DATA_ALTIMAGES = 'altimages';
+    const CHAMPION_DATA_BLURB = 'blurb';
+    const CHAMPION_DATA_ENEMYTIPS = 'enemytips';
+    const CHAMPION_DATA_IMAGE = 'image';
+    const CHAMPION_DATA_INFO = 'info';
+    const CHAMPION_DATA_LORE = 'lore';
+    const CHAMPION_DATA_PARTYPE = 'partype';
+    const CHAMPION_DATA_PASSIVE = 'passive';
+    const CHAMPION_DATA_RECOMMENDED = 'recommended';
+    const CHAMPION_DATA_SKINS = 'skins';
+    const CHAMPION_DATA_SPELLS = 'spells';
+    const CHAMPION_DATA_STATS = 'stats';
+    const CHAMPION_DATA_TAGS = 'tags';
+
     /**
      * Gets all static champion data with the given $data option.
      *
