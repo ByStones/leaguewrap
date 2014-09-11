@@ -185,6 +185,27 @@ class StaticdataMethod extends AbstractMethod {
         return $this->appendId($id) ? new staticMastery($array) : new MasteryList($array);
     }
 
+    const RUNE_DATA_ALL = 'all';
+    const RUNE_DATA_BASIC = 'basic';
+    const RUNE_DATA_COLLOQ = 'colloq';
+    const RUNE_DATA_CONSUME_ON_FULL = 'consumeOnFull';
+    const RUNE_DATA_CONSUMED = 'consumed';
+    const RUNE_DATA_DEPTH = 'depth';
+    const RUNE_DATA_FROM = 'from';
+    const RUNE_DATA_GOLD = 'gold';
+    const RUNE_DATA_HIDE_FROM_ALL = 'hideFromAll';
+    const RUNE_DATA_IMAGE = 'image';
+    const RUNE_DATA_IN_STORE = 'inStore';
+    const RUNE_DATA_INTO = 'into';
+    const RUNE_DATA_MAPS = 'maps';
+    const RUNE_DATA_REQUIRED_CHAMPION = 'requiredChampion';
+    const RUNE_DATA_SANITIZED_DESCRIPTION = 'sanitizedDescription';
+    const RUNE_DATA_SPECIAL_RECIPE = 'specialRecipe';
+    const RUNE_DATA_STACKS = 'stacks';
+    const RUNE_DATA_STATS = 'stats';
+    const RUNE_DATA_TAGS = 'tags';
+    const RUNE_DATA_TREE = 'tree';
+
     /**
      * Gets static data on all runes.
      *
