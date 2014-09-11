@@ -108,6 +108,26 @@ class StaticdataMethod extends AbstractMethod {
         return $this->appendId($id) ? new staticChampion($array) : new ChampionList($array);
     }
 
+    const ITEM_DATA_ALL = 'all';
+    const ITEM_DATA_COLLOQ = 'colloq';
+    const ITEM_DATA_CONSUME_ON_FULL = 'consumeOnFull';
+    const ITEM_DATA_CONSUMED = 'consumed';
+    const ITEM_DATA_DEPTH = 'depth';
+    const ITEM_DATA_FROM = 'from';
+    const ITEM_DATA_GOLD = 'gold';
+    const ITEM_DATA_GROUPS = 'groups';
+    const ITEM_DATA_HIDE_FROM_ALL = 'hideFromAll';
+    const ITEM_DATA_IMAGE = 'image';
+    const ITEM_DATA_IN_STORE = 'inStore';
+    const ITEM_DATA_INTO = 'into';
+    const ITEM_DATA_MAPS = 'maps';
+    const ITEM_DATA_REQUIRED_CHAMPION = 'requiredChampion';
+    const ITEM_DATA_SANITIZED_DESCRIPTION = 'sanitizedDescription';
+    const ITEM_DATA_SPECIAL_RECIPE = 'specialRecipe';
+    const ITEM_DATA_STACKS = 'stacks';
+    const ITEM_DATA_TAGS = 'tags';
+    const ITEM_DATA_TREE = 'tree';
+
     /**
      * Gets static data on all items.
      *
