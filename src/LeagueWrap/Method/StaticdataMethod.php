@@ -231,6 +231,27 @@ class StaticdataMethod extends AbstractMethod {
         return $this->appendId($id) ? new staticRune($array) : new RuneList($array);
     }
 
+    const SUMMONER_SPELL_DATA_ALL = 'all';
+    const SUMMONER_SPELL_DATA_COOLDOWN = 'cooldown';
+    const SUMMONER_SPELL_DATA_COOLDOWN_BURN = 'cooldownBurn';
+    const SUMMONER_SPELL_DATA_COST = 'cost';
+    const SUMMONER_SPELL_DATA_CUST_BURN = 'costBurn';
+    const SUMMONER_SPELL_COST_TYPE = 'costType';
+    const SUMMONER_SPELL_EFFECT = 'effect';
+    const SUMMONER_SPELL_EFFECT_BURN = 'effectBurn';
+    const SUMMONER_SPELL_IMAGE = 'image';
+    const SUMMONER_SPELL_KEY = 'key';
+    const SUMMONER_SPELL_LEVELTIP = 'leveltip';
+    const SUMMONER_SPELL_MAXRANK = 'maxrank';
+    const SUMMONER_SPELL_MODES = 'modes';
+    const SUMMONER_SPELL_RANGE = 'range';
+    const SUMMONER_SPELL_RANGE_BURN = 'rangeBurn';
+    const SUMMONER_SPELL_RESOURCE = 'resource';
+    const SUMMONER_SPELL_SANITIZED_DESCRIPTION = 'sanitizedDescription';
+    const SUMMONER_SPELL_SANITIZED_TOOLTIP = 'sanitizedTooltip';
+    const SUMMONER_SPELL_TOOLTIP = 'tooltip';
+    const SUMMONER_SPELL_VARS = 'vars';
+
     /**
      * Gets static data on all summoner spells.
      *
