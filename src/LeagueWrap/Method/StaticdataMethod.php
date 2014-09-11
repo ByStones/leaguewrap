@@ -153,6 +153,13 @@ class StaticdataMethod extends AbstractMethod {
         return $this->appendId($id) ? new staticItem($array) : new ItemList($array);
     }
 
+    const MASTERY_DATA_ALL = 'all';
+    const MASTERY_DATA_IMAGE = 'image';
+    const MASTERY_DATA_PREREQ = 'preqreq';
+    const MASTERY_DATA_RANKS = 'ranks';
+    const MASTERY_DATA_SANITIZED_DESCRIPTION = 'sanitizedDescription';
+    const MASTERY_DATA_TREE = 'tree';
+
     /**
      * Gets static data on all masteries.
      *
