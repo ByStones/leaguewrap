@@ -83,29 +83,23 @@ class StaticdataMethod extends AbstractMethod {
     const CHAMPION_DATA_STATS = 'stats';
     const CHAMPION_DATA_TAGS = 'tags';
 
-    /**
-     * Gets all static champion data with the given $data option.
-     *
-     * @param string #data
-     * @retrn ChampionList
-     */
-    public function getChampions($data = null) {
-        return $this->getChampion(null, $data);
+    public function findChampions(array $data = [], $dataById = false) {
+        $params = $this->setUpParams([
+            'dataById' => $dataById ? 'true' : 'false',
+            'champData' => implode(',', $data),
+        ]);
+
+        $array = $this->request('champion', $params, true);
+        return new ChampionList($array);
     }
 
-    /**
-     * Gets the static champion data of all champions if $id is null.
-     * If $id is set it will attempt to get info for that champion only.
-     *
-     * @param int $id
-     * @param string $data
-     * @return ChampionList|Champion
-     */
-    public function getChampion($id, $data = null) {
-        $params = $this->setUpParams($id, $data, 'champData');
-        $array = $this->makeRequest('champion', $id, $params);
+    public function findChampionById($id, array $data = []) {
+        $params = $this->setUpParams([
+            'champData' => implode(',', $data),
+        ]);
 
-        return $this->appendId($id) ? new staticChampion($array) : new ChampionList($array);
+        $array = $this->request('champion/' . $id, $params, true);
+        return new Champion($array);
     }
 
     const ITEM_DATA_ALL = 'all';
@@ -128,29 +122,22 @@ class StaticdataMethod extends AbstractMethod {
     const ITEM_DATA_TAGS = 'tags';
     const ITEM_DATA_TREE = 'tree';
 
-    /**
-     * Gets static data on all items.
-     *
-     * @param string $data
-     * @return ItemList
-     */
-    public function getItems($data = null) {
-        return $this->getItem(null, $data);
+    public function findItems(array $data = []) {
+        $params = $this->setUpParams([
+            'itemListData' => implode(',', $data),
+        ]);
+
+        $array = $this->request('item', $params, true);
+        return new ItemList($array);
     }
 
-    /**
-     * Gets the static item data of all items if $id is null.
-     * If $id is set it will attempt to get info for that item only.
-     *
-     * @param int $id
-     * @param string $data
-     * @return ItemList|Item
-     */
-    public function getItem($id, $data = null) {
-        $params = $this->setUpParams($id, $data, 'itemListData', 'itemData');
-        $array = $this->makeRequest('item', $id, $params);
+    public function findItemById($id, array $data = []) {
+        $params = $this->setUpParams([
+            'itemData' => implode(',', $data),
+        ]);
 
-        return $this->appendId($id) ? new staticItem($array) : new ItemList($array);
+        $array = $this->request('item/' . $id, $params, true);
+        return new Item($array);
     }
 
     const MASTERY_DATA_ALL = 'all';
@@ -160,29 +147,22 @@ class StaticdataMethod extends AbstractMethod {
     const MASTERY_DATA_SANITIZED_DESCRIPTION = 'sanitizedDescription';
     const MASTERY_DATA_TREE = 'tree';
 
-    /**
-     * Gets static data on all masteries.
-     *
-     * @param string $data
-     * @return MasteryList
-     */
-    public function getMasteries($data = null) {
-        return $this->getMastery(null, $data);
+    public function findMasteries(array $data = []) {
+        $params = $this->setUpParams([
+            'masteryListData' => implode(',', $data),
+        ]);
+
+        $array = $this->request('mastery', $params, true);
+        return new MasteryList($array);
     }
 
-    /**
-     * Gets the mastery data of all masteries if $id is null.
-     * If $id is a set it will attempt to get info for that mastery only.
-     *
-     * @param int $id
-     * @param string $data
-     * @return MasteryList|Mastery
-     */
-    public function getMastery($id, $data = null) {
-        $params = $this->setUpParams($id, $data, 'masteryListData', 'masteryData');
-        $array = $this->makeRequest('mastery', $id, $params);
+    public function findMasteryById($id, array  $data = []) {
+        $params = $this->setUpParams([
+            'masteryList' => implode(',', $data),
+        ]);
 
-        return $this->appendId($id) ? new staticMastery($array) : new MasteryList($array);
+        $array = $this->request('mastery/' . $id, $params, true);
+        return new Mastery($array);
     }
 
     const RUNE_DATA_ALL = 'all';
@@ -206,29 +186,22 @@ class StaticdataMethod extends AbstractMethod {
     const RUNE_DATA_TAGS = 'tags';
     const RUNE_DATA_TREE = 'tree';
 
-    /**
-     * Gets static data on all runes.
-     *
-     * @param string $data
-     * @return RuneList
-     */
-    public function getRunes($data = null) {
-        return $this->getRune('all', $data);
+    public function findRunes(array $data = []) {
+        $params = $this->setUpParams([
+            'runeListData' => implode(',', $data),
+        ]);
+
+        $array = $this->request('rune', $params, true);
+        return new RuneList($array);
     }
 
-    /**
-     * Gets the rune data of all runes if $id is null.
-     * If $id is set it will attempt to get info for that rune only.
-     *
-     * $param int $id
-     * @param string $data
-     * @return RuneList|Rune
-     */
-    public function getRune($id, $data = null) {
-        $params = $this->setUpParams($id, $data, 'runeListData', 'runeData');
-        $array = $this->makeRequest('rune', $id, $params);
+    public function findRuneById($id, array $data = []) {
+        $params = $this->setUpParams([
+            'runeData' => implode(',', $data),
+        ]);
 
-        return $this->appendId($id) ? new staticRune($array) : new RuneList($array);
+        $array = $this->request('rune/' . $id, $params, true);
+        return new Rune($array);
     }
 
     const SUMMONER_SPELL_DATA_ALL = 'all';
@@ -252,29 +225,22 @@ class StaticdataMethod extends AbstractMethod {
     const SUMMONER_SPELL_TOOLTIP = 'tooltip';
     const SUMMONER_SPELL_VARS = 'vars';
 
-    /**
-     * Gets static data on all summoner spells.
-     *
-     * @param string $data
-     * @return SummonerSpellList
-     */
-    public function getSummonerSpells($data = null) {
-        return $this->getSummonerSpell('all', $data);
+    public function findSummonerSpells(array $data = []) {
+        $params = $this->setUpParams([
+            'spellListData' => implode(',', $data),
+        ]);
+
+        $array = $this->request('spell', $params, true);
+        return new SummonerSpellList($array);
     }
 
-    /**
-     * Gets the summoner spell data of all spells if $id is null
-     * If $id is set it will attept to get info for that spell only.
-     * 
-     * @param int $id
-     * @param string $data
-     * @return SummonerSpell|SummonerSpellList
-     */
-    public function getSummonerSpell($id, $data = null) {
-        $params = $this->setUpParams($id, $data, 'spellData');
-        $array = $this->makeRequest('summoner-spell', $id, $params);
+    public function findSummonerSpellById($id, array $data = []) {
+        $params = $this->setUpParams([
+            'spellData' => implode(',', $data),
+        ]);
 
-        return $this->appendId($id) ? new staticSummonerSpell($array) : new SummonerSpellList($array);
+        $array = $this->request('spell/' . $id, $params, true);
+        return new SummonerSpell($array);
     }
 
     /**
@@ -282,82 +248,28 @@ class StaticdataMethod extends AbstractMethod {
      *
      * @return Realm
      */
-    public function getRealm() {
-        $params = $this->setUpParams();
-        $array = $this->makeRequest('realm', null, $params);
+    public function findRealm() {
+        $array = $this->request('realm');
 
-        return new staticRealm($array);
+        return new Realm($array);
     }
 
-    /**
-     * Get the version information for the current region.
-     *
-     * @return Array
-     */
-    public function version() {
-        $params = $this->setUpParams();
-        return $this->makeRequest('versions', null, $params);
+    public function findVersions() {
+        $array = $this->request('verions');
+
+        return $array;
     }
 
-    /**
-     * Make the request given the proper information.
-     *
-     * @param string $path
-     * @param mixed $id
-     * @param array $params
-     * @return array
-     */
-    protected function makeRequest($path, $id, array $params) {
-        if ($this->appendId($id)) {
-            $path .= "/$id";
-        }
-
-        return $this->request($path, $params, true);
-    }
-
-    /**
-     * Set up the boiler plat for the param array for any 
-     * static data call.
-     *
-     * @param mixed $id
-     * @param mixed $data
-     * @param string $listData
-     * @param string $itemData
-     * @return array
-     */
-    protected function setUpParams($id = null, $data = null, $listData = '', $itemData = '') {
-        $params = [];
-        if (!is_null($this->locale)) {
+    protected function setUpParams(array $params) {
+        if ($this->locale !== null) {
             $params['locale'] = $this->locale;
         }
-        if (!is_null($this->DDversion)) {
+
+        if ($this->DDversion !== null) {
             $params['version'] = $this->DDversion;
         }
-        if (!$this->appendId($id) and
-                $itemData == '' and
-                $listData != '') {
-            // add the dataById argument
-            $params['dataById'] = 'true';
-        }
-        if (!is_null($data)) {
-            if ($this->appendId($id)) {
-                $params[$itemData] = $data;
-            } else {
-                $params[$listData] = $data;
-            }
-        }
-        return $params;
-    }
 
-    /**
-     * Check if we should append the id to the end of the 
-     * url or not.
-     *
-     * @param mixed $id
-     * @return bool
-     */
-    protected function appendId($id) {
-        return !is_null($id) && $id != 'all';
+        return $params;
     }
 
 }
